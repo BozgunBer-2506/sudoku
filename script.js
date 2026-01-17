@@ -77,6 +77,14 @@ function renderGrid() {
             cell.className = 'cell';
             cell.id = `cell-${i}-${j}`;
 
+            // 3x3 kutuları için class ekle
+            if ((j + 1) % 3 === 0) {
+                cell.classList.add('border-right');
+            }
+            if ((i + 1) % 3 === 0) {
+                cell.classList.add('border-bottom');
+            }
+
             if (originalBoard[i][j] !== 0) {
                 cell.classList.add('given');
             }
