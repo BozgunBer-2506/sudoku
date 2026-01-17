@@ -1,87 +1,105 @@
-# Sudoku Oyunu
+# 数独 SUDOKU Game
 
-Vercel'de barındırılan interaktif Sudoku bulmacası oyunu.
+**Multilingual** interactive Sudoku puzzle game with **infinite random** puzzles.
 
-## ✨ Özellikler
+## ✨ Features
 
-- 🎮 **3 Zorluk Seviyesi**: Kolay, Orta, Zor
-- ⏱️ **Gerçek Zamanlı Zamanlayıcı**: Kaç saniyede çözdüğünü takip et
-- 📊 **İstatistikler**: Doğruluk yüzdesi ve boş hücre sayısı
-- 🎨 **Modern Tasarım**: Koyu tema (dark mode) ile şık arayüz
-- 📱 **Mobil Uyumlu**: Telefon, tablet ve bilgisayarda çalışır
-- ✅ **Çözüm Kontrol**: Cevaplarını kontrol et ve geri bildirim al
-- 🎉 **Başarı Modalı**: Sudoku'yu çözdüğünde tebrik mesajı
+- 🌍 **3 Language Support**: Turkish, English, German
+- 🎮 **3 Difficulty Levels**: Easy, Medium, Hard
+- ♾️ **Infinite Games**: Algorithm generates millions of different Sudoku puzzles automatically
+- ⏱️ **Real-Time Timer**: Track how many seconds it takes to solve
+- 📊 **Statistics**: Accuracy percentage and empty cell counter
+- 🎨 **Modern Design**: Sleek neon blue theme with dark interface
+- 📱 **Mobile Friendly**: Perfect on phone, tablet, and desktop
+- ✅ **Solution Check**: Validate answers and get instant feedback
+- 🎉 **Success Modal**: Celebration message when you solve the puzzle
+- 💡 **Tips**: Sudoku solving strategies
 
-## 🎮 Nasıl Oynanır?
+## 🎮 How to Play
 
-1. **Zorluk Seviyesi Seç**: Sol taraftan Kolay, Orta veya Zor'u seç
-2. **Hücreyi Tıkla**: Doldurmak istediğin boş hücreyi seç
-3. **Numara Gir**: 1-9 arasında bir numara seç
-4. **Kontrol Et**: "Kontrol Et" butonuyla çözümünü kontrol et
-5. **Yeni Oyun**: "Yeni Oyun" ile baştan başla
+1. **Select Language**: Choose TR/EN/DE from the 🌍 Language section
+2. **Choose Difficulty**: Select Easy, Medium, or Hard level
+3. **Select Cell**: Click on an empty cell you want to fill
+4. **Enter Number**: Choose a number from buttons 1-9
+5. **Check Solution**: Click "Check" button to validate your answer
+6. **New Game**: Press "New Game" button anytime to get a new puzzle
 
-## 📏 Sudoku Kuralları
+## 📏 Sudoku Rules
 
-- Her **satırda** 1-9 arası her sayı bir kez olmalı
-- Her **sütunda** 1-9 arası her sayı bir kez olmalı
-- Her **3x3 kutuda** 1-9 arası her sayı bir kez olmalı
+- Each **row** must contain numbers 1-9 **exactly once**
+- Each **column** must contain numbers 1-9 **exactly once**
+- Each **3x3 box** must contain numbers 1-9 **exactly once**
 
-## 🛠️ Teknolojiler
+## 🛠️ Technologies
 
-- **HTML5**: Sayfa yapısı
-- **CSS3**: Modern tasarım ve responsive layout
-- **JavaScript**: Oyun mantığı ve etkileşimler
+- **HTML5**: Page structure with multi-language support
+- **CSS3**: Modern neon design with responsive layout
+- **JavaScript**: Game logic, Sudoku algorithm, multi-language system
 
-## 📁 Dosya Yapısı
+## 📁 File Structure
 
 ```
 sudoku-oyunu/
-├── index.html      # HTML yapısı
-├── style.css       # CSS stilleri
-├── script.js       # JavaScript mantığı
-└── README.md       # Bu dosya
+├── index.html      # HTML structure (3 language support)
+├── style.css       # CSS styling (neon theme, mobile responsive)
+├── script.js       # JavaScript (auto Sudoku generation, 3 languages)
+└── README.md       # This file
 ```
 
-## 🚀 Vercel'e Yayınlama
+## 🚀 Installation
 
-### GitHub Yöntemi (Önerilen)
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/BozgunBer-2506/sudoku.git
+   cd sudoku
+   ```
 
-1. GitHub hesabı oluştur (github.com)
-2. Yeni repository oluştur: `sudoku-oyunu`
-3. Dosyaları GitHub'a yükle
-4. vercel.com'a git ve GitHub hesabınla giriş yap
-5. "Import Project" seç ve reposunu seç
-6. "Deploy" ye tıkla
+2. Open `index.html` in your browser or start a local server:
+   ```bash
+   python -m http.server 8000
+   ```
 
-### Vercel CLI Yöntemi
+3. Visit `http://localhost:8000` and play!
 
-```bash
-# Vercel CLI'ı kur
-npm install -g vercel
+## 💡 Game Tips
 
-# Proje klasörüne gir
-cd sudoku-oyunu
+- **Avoid guessing**: Think logically
+- **Analyze rows**: Find missing numbers
+- **Check columns**: Remember repeated numbers
+- **Inspect 3x3 boxes**: Note what's missing in each box
+- **Find frequent numbers**: Easy to place numbers that appear often
+- **Progress step by step**: Don't jump to uncertain spots
 
-# Yayınla
-vercel
-```
+## 🎯 Features in Detail
 
-Vercel sana birkaç soru soracak:
-- **Scope**: Kişisel hesabını seç
-- **Project name**: `sudoku-oyunu`
-- **Root directory**: `.` (nokta)
+### Auto Sudoku Generation
+- Each game creates a completely **new and random** Sudoku
+- `fillBoard()` algorithm guarantees valid and solvable puzzles
+- Variable cell count based on difficulty:
+  - **Easy**: 30 cells removed (49 numbers remain)
+  - **Medium**: 45 cells removed (36 numbers remain)
+  - **Hard**: 55 cells removed (26 numbers remain)
 
-## 💡 İpuçları
+### 3 Language Support
+- All text changes dynamically
+- Selected language affects entire UI
+- Supported languages: 🇹🇷 Turkish, 🇬🇧 English, 🇩🇪 German
 
-- Yanlış tahminlerden kaçın, mantıksal düşün
-- Satır, sütun ve 3x3 kutulara dikkat et
-- Sıklıkla göründüğü sayıları kolayca tayin edebilirsin
-- Sayıyı girip kontrol ederek ilerle
+### Timer and Statistics
+- Real-time elapsed time tracking
+- Empty cell counter
+- Accuracy percentage calculation
 
-## 👨‍💻 Geliştirici
+## 👨‍💻 Developer
 
-**Crafted by The_Bozgun**
+**Crafted by The_Bozgun** 🧠
 
-## 📄 Lisans
+🎌 数独ゲーム © 2026
 
-MIT License - Serbestçe kullanabilirsin!
+## 📄 License
+
+MIT License - Use freely!
+
+---
+
+**GitHub Repo**: https://github.com/BozgunBer-2506/sudoku
