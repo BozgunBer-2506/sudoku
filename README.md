@@ -39,7 +39,7 @@
 ## 📁 File Structure
 
 ```
-sudoku-oyunu/
+sudoku/
 ├── index.html      # HTML structure (3 language support)
 ├── style.css       # CSS styling (neon theme, mobile responsive)
 ├── script.js       # JavaScript (auto Sudoku generation, 3 languages)
