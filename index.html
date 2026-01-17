@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Oyunu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="logo">S U D O K U</div>
+
+            <div class="section">
+                <div class="section-title">Zorluk Seviyesi</div>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn active" onclick="setDifficulty('easy')">Kolay</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('medium')">Orta</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('hard')">Zor</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">İstatistikler</div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Süre:</span>
+                        <span class="timer" id="timer">00:00</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Boş Hücre:</span>
+                        <span class="stat-value" id="empty-count">81</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Doğruluk:</span>
+                        <span class="stat-value" id="accuracy">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="action-buttons">
+                    <button class="action-btn full" onclick="newGame()">🔄 Yeni Oyun</button>
+                    <button class="action-btn" onclick="checkSolution()">✓ Kontrol Et</button>
+                    <button class="action-btn" onclick="clearCell()">✕ Hücreyi Sil</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="tips">
+                    <h4>💡 İpuçları</h4>
+                    <ul>
+                        <li>Her satırda 1-9 bir kez olmalı</li>
+                        <li>Her sütunda 1-9 bir kez olmalı</li>
+                        <li>Her 3x3 kutuda 1-9 bir kez olmalı</li>
+                        <li>Mantıksal düşün, tahmin etme</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME AREA -->
+        <div class="game-area">
+            <div class="header">
+                <h1>Sudoku Bulmacası</h1>
+                <p id="difficulty-label">Kolay seviye</p>
+            </div>
+
+            <div class="sudoku-grid" id="grid"></div>
+
+            <div class="number-pad">
+                <button class="number-btn" onclick="fillNumber(1)">1</button>
+                <button class="number-btn" onclick="fillNumber(2)">2</button>
+                <button class="number-btn" onclick="fillNumber(3)">3</button>
+                <button class="number-btn" onclick="fillNumber(4)">4</button>
+                <button class="number-btn" onclick="fillNumber(5)">5</button>
+                <button class="number-btn" onclick="fillNumber(6)">6</button>
+                <button class="number-btn" onclick="fillNumber(7)">7</button>
+                <button class="number-btn" onclick="fillNumber(8)">8</button>
+                <button class="number-btn" onclick="fillNumber(9)">9</button>
+                <button class="number-btn" onclick="clearCell()">Sil</button>
+            </div>
+
+            <div class="status" id="status"></div>
+        </div>
+    </div>
+
+    <!-- SUCCESS MODAL -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <h2>🎉 Tebrikler!</h2>
+            <p id="finalTime"></p>
+            <p>Sudoku'yu başarıyla çözdün!</p>
+            <div class="modal-buttons">
+                <button class="modal-btn" onclick="newGame()">Yeni Oyun</button>
+                <button class="modal-btn" onclick="closeModal()">Kapat</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <footer class="footer">
+        <p>&copy; 2024 Sudoku Oyunu. Crafted by <strong>The_Bozgun</strong></p>
+    </footer>
+</body>
+</html>
