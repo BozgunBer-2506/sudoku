@@ -243,28 +243,32 @@ body {
     color: #fff;
 }
 
-/* Kalın çizgiler - 3x3 kutuları */
+/* 3x3 kutular için kalın çizgiler */
+/* Sağ çizgiler (her 3. sütun) */
 .cell:nth-child(3n) {
     border-right: 3px solid #00d4ff;
 }
 
-.cell:nth-child(3n+1) {
-    border-left: 1px solid #444;
-}
-
-.cell:nth-child(n+19):nth-child(-n+27) {
+/* Alt çizgiler (her 3. satır) */
+.cell:nth-child(27n),
+.cell:nth-child(27n+1),
+.cell:nth-child(27n+2),
+.cell:nth-child(27n+3),
+.cell:nth-child(27n+4),
+.cell:nth-child(27n+5),
+.cell:nth-child(27n+6),
+.cell:nth-child(27n+7),
+.cell:nth-child(27n+8) {
     border-bottom: 3px solid #00d4ff;
 }
 
-.cell:nth-child(n+1):nth-child(-n+9) {
-    border-top: 3px solid #00d4ff;
+/* Sol ve üst çizgiler */
+.cell:nth-child(9n+1) {
+    border-left: 3px solid #00d4ff;
 }
 
-/* Dikey 3x3 çizgileri */
-.cell:nth-child(27n+1),
-.cell:nth-child(27n+10),
-.cell:nth-child(27n+19) {
-    border-left: 3px solid #00d4ff;
+.cell:nth-child(-n+9) {
+    border-top: 3px solid #00d4ff;
 }
 
 .number-pad {
