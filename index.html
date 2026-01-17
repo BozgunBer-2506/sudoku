@@ -10,30 +10,39 @@
     <div class="main-container">
         <!-- SIDEBAR -->
         <div class="sidebar">
-            <div class="logo">数独<span class="logo-sub">SUDOKU</span></div>
+            <div class="logo"><div>数独</div><div>SUDOKU</div></div>
 
             <div class="section">
-                <div class="section-title">Zorluk Seviyesi</div>
-                <div class="difficulty-buttons">
-                    <button class="difficulty-btn active" onclick="setDifficulty('easy')">Kolay</button>
-                    <button class="difficulty-btn" onclick="setDifficulty('medium')">Orta</button>
-                    <button class="difficulty-btn" onclick="setDifficulty('hard')">Zor</button>
+                <div class="section-title" id="lang-title">🌍 Dil</div>
+                <div class="difficulty-buttons" style="gap: 10px;">
+                    <button class="difficulty-btn active" onclick="setLanguage('tr')" id="btn-tr">🇹🇷 TR</button>
+                    <button class="difficulty-btn" onclick="setLanguage('en')" id="btn-en">🇬🇧 EN</button>
+                    <button class="difficulty-btn" onclick="setLanguage('de')" id="btn-de">🇩🇪 DE</button>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">İstatistikler</div>
+                <div class="section-title" id="difficulty-title">Zorluk Seviyesi</div>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn active" onclick="setDifficulty('easy')" id="btn-easy">Kolay</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('medium')" id="btn-medium">Orta</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('hard')" id="btn-hard">Zor</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title" id="stats-title">İstatistikler</div>
                 <div class="stats">
                     <div class="stat-item">
-                        <span class="stat-label">Süre:</span>
+                        <span class="stat-label" id="time-label">Süre:</span>
                         <span class="timer" id="timer">00:00</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">Boş Hücre:</span>
+                        <span class="stat-label" id="empty-label">Boş Hücre:</span>
                         <span class="stat-value" id="empty-count">81</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">Doğruluk:</span>
+                        <span class="stat-label" id="accuracy-label">Doğruluk:</span>
                         <span class="stat-value" id="accuracy">0%</span>
                     </div>
                 </div>
@@ -41,20 +50,20 @@
 
             <div class="section">
                 <div class="action-buttons">
-                    <button class="action-btn full" onclick="newGame()">🔄 Yeni Oyun</button>
-                    <button class="action-btn" onclick="checkSolution()">✓ Kontrol Et</button>
-                    <button class="action-btn" onclick="clearCell()">✕ Hücreyi Sil</button>
+                    <button class="action-btn full" onclick="newGame()" id="btn-new">🔄 Yeni Oyun</button>
+                    <button class="action-btn" onclick="checkSolution()" id="btn-check">✓ Kontrol Et</button>
+                    <button class="action-btn" onclick="clearCell()" id="btn-clear">✕ Hücreyi Sil</button>
                 </div>
             </div>
 
             <div class="section">
                 <div class="tips">
-                    <h4>💡 İpuçları</h4>
-                    <ul>
-                        <li>Her satırda 1-9 bir kez olmalı</li>
-                        <li>Her sütunda 1-9 bir kez olmalı</li>
-                        <li>Her 3x3 kutuda 1-9 bir kez olmalı</li>
-                        <li>Mantıksal düşün, tahmin etme</li>
+                    <h4 id="tips-title">💡 İpuçları</h4>
+                    <ul id="tips-list">
+                        <li id="tip-1">Her satırda 1-9 bir kez olmalı</li>
+                        <li id="tip-2">Her sütunda 1-9 bir kez olmalı</li>
+                        <li id="tip-3">Her 3x3 kutuda 1-9 bir kez olmalı</li>
+                        <li id="tip-4">Mantıksal düşün, tahmin etme</li>
                     </ul>
                 </div>
             </div>
@@ -63,7 +72,7 @@
         <!-- GAME AREA -->
         <div class="game-area">
             <div class="header">
-                <h1>Sudoku Bulmacası</h1>
+                <h1 id="title">Sudoku Bulmacası</h1>
                 <p id="difficulty-label">Kolay seviye</p>
             </div>
 
@@ -79,7 +88,7 @@
                 <button class="number-btn" onclick="fillNumber(7)">7</button>
                 <button class="number-btn" onclick="fillNumber(8)">8</button>
                 <button class="number-btn" onclick="fillNumber(9)">9</button>
-                <button class="number-btn" onclick="clearCell()">Sil</button>
+                <button class="number-btn" onclick="clearCell()" id="btn-num-delete" style="font-size: 11px;">Sil</button>
             </div>
 
             <div class="status" id="status"></div>
@@ -89,12 +98,12 @@
     <!-- SUCCESS MODAL -->
     <div class="modal" id="successModal">
         <div class="modal-content">
-            <h2>🎉 Tebrikler!</h2>
+            <h2 id="modal-title">🎉 Tebrikler!</h2>
             <p id="finalTime"></p>
-            <p>Sudoku'yu başarıyla çözdün!</p>
+            <p id="modal-text">Sudoku'yu başarıyla çözdün!</p>
             <div class="modal-buttons">
-                <button class="modal-btn" onclick="newGame()">Yeni Oyun</button>
-                <button class="modal-btn" onclick="closeModal()">Kapat</button>
+                <button class="modal-btn" onclick="newGame()" id="btn-modal-new">Yeni Oyun</button>
+                <button class="modal-btn" onclick="closeModal()" id="btn-modal-close">Kapat</button>
             </div>
         </div>
     </div>
