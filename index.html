@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sudoku Oyunu</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Center action buttons vertically and horizontally */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
     <div class="main-container">
@@ -48,15 +57,15 @@
                 </div>
             </div>
 
-           <div class="section">
-    <div class="action-buttons">
-        <button class="action-btn full" onclick="newGame()" id="btn-new">🔄 Yeni Oyun</button>
-        <button class="action-btn" onclick="checkSolution()" id="btn-check">✓ Kontrol Et</button>
-        <button class="action-btn" onclick="clearCell()" id="btn-clear">✕ Hücreyi Sil</button>
-        <!-- New button for optional single-cell check -->
-        <button class="action-btn" onclick="checkSelectedCell()" id="btn-check-cell">🔍 Seçili Hücreyi Kontrol Et</button>
-    </div>
-</div>
+            <div class="section">
+                <div class="action-buttons">
+                    <button class="action-btn full" onclick="newGame()" id="btn-new">🔄 Yeni Oyun</button>
+                    <button class="action-btn" onclick="checkSolution()" id="btn-check">✓ Kontrol Et</button>
+                    <button class="action-btn" onclick="clearCell()" id="btn-clear">✕ Hücreyi Sil</button>
+                    <!-- Translatable single-cell check button -->
+                    <button class="action-btn" onclick="checkSelectedCell()" id="btn-check-cell"></button>
+                </div>
+            </div>
 
             <div class="section">
                 <div class="tips">
@@ -113,7 +122,7 @@
     <script src="script.js"></script>
 
     <footer class="footer">
-        <p>🎌 数独ゲーム © 2026 | 作成者: <strong>The_Bozgun</strong> 🧠</p>
+        <p>🎌 数独ゲーム © 2026 | 作ucı: <strong>The_Bozgun</strong> 🧠</p>
     </footer>
 </body>
 </html>
