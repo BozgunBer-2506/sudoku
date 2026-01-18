@@ -48,13 +48,15 @@
                 </div>
             </div>
 
-            <div class="section">
-                <div class="action-buttons">
-                    <button class="action-btn full" onclick="newGame()" id="btn-new">🔄 Yeni Oyun</button>
-                    <button class="action-btn" onclick="checkSolution()" id="btn-check">✓ Kontrol Et</button>
-                    <button class="action-btn" onclick="clearCell()" id="btn-clear">✕ Hücreyi Sil</button>
-                </div>
-            </div>
+           <div class="section">
+    <div class="action-buttons">
+        <button class="action-btn full" onclick="newGame()" id="btn-new">🔄 Yeni Oyun</button>
+        <button class="action-btn" onclick="checkSolution()" id="btn-check">✓ Kontrol Et</button>
+        <button class="action-btn" onclick="clearCell()" id="btn-clear">✕ Hücreyi Sil</button>
+        <!-- New button for optional single-cell check -->
+        <button class="action-btn" onclick="checkSelectedCell()" id="btn-check-cell">🔍 Seçili Hücreyi Kontrol Et</button>
+    </div>
+</div>
 
             <div class="section">
                 <div class="tips">
