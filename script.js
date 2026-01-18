@@ -6,9 +6,7 @@ let gameTimer = 0;
 let timerInterval = null;
 let difficulty = 'easy';
 let language = 'tr';
-let errorAssist = false; // optional feature, currently not automatic
 
-// translations for multiple languages
 const translations = {
     tr: {
         lang_title: '🌍 Dil',
@@ -39,7 +37,8 @@ const translations = {
         success_text: 'Sudoku\'yu başarıyla çözdün!',
         time_text: 'Süreniz:',
         modal_new: 'Yeni Oyun',
-        modal_close: 'Kapat'
+        modal_close: 'Kapat',
+        check_cell: 'Seçili Hücreyi Kontrol Et'
     },
     en: {
         lang_title: '🌍 Language',
@@ -70,7 +69,8 @@ const translations = {
         success_text: 'You solved the Sudoku!',
         time_text: 'Your time:',
         modal_new: 'New Game',
-        modal_close: 'Close'
+        modal_close: 'Close',
+        check_cell: 'Check Selected Cell'
     },
     de: {
         lang_title: '🌍 Sprache',
@@ -101,11 +101,13 @@ const translations = {
         success_text: 'Du hast das Sudoku gelöst!',
         time_text: 'Deine Zeit:',
         modal_new: 'Neues Spiel',
-        modal_close: 'Schließen'
+        modal_close: 'Schließen',
+        check_cell: 'Gewählte Zelle überprüfen'
     }
 };
 
-// validate a number for a specific cell
+// --- Sudoku helper functions ---
+
 function isValid(grid, row, col, num) {
     for (let i = 0; i < 9; i++) {
         if (grid[row][i] === num || grid[i][col] === num) return false;
@@ -120,12 +122,11 @@ function isValid(grid, row, col, num) {
     return true;
 }
 
-// fill board recursively for Sudoku generation
 function fillBoard(grid) {
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
             if (grid[i][j] === 0) {
-                let nums = [1,2,3,4,5,6,7,8,9].sort(() => Math.random()-0.5);
+                let nums = [1,2,3,4,5,6,7,8,9].sort(() => Math.random() - 0.5);
                 for (let num of nums) {
                     if (isValid(grid, i, j, num)) {
                         grid[i][j] = num;
@@ -140,27 +141,25 @@ function fillBoard(grid) {
     return true;
 }
 
-// generate Sudoku puzzle based on difficulty
 function generateSudoku(level) {
-    let newBoard = Array.from({length:9},()=>Array(9).fill(0));
+    let newBoard = Array.from({ length: 9 }, () => Array(9).fill(0));
     fillBoard(newBoard);
     let fullSolution = JSON.parse(JSON.stringify(newBoard));
-
-    const difficultyMap = { 'easy':30, 'medium':45, 'hard':55 };
+    const difficultyMap = { 'easy': 30, 'medium': 45, 'hard': 55 };
     let cellsToRemove = difficultyMap[level] || 40;
-
-    while(cellsToRemove>0){
-        let row = Math.floor(Math.random()*9);
-        let col = Math.floor(Math.random()*9);
-        if(newBoard[row][col]!==0){
-            newBoard[row][col]=0;
+    while (cellsToRemove > 0) {
+        let row = Math.floor(Math.random() * 9);
+        let col = Math.floor(Math.random() * 9);
+        if (newBoard[row][col] !== 0) {
+            newBoard[row][col] = 0;
             cellsToRemove--;
         }
     }
     return { puzzle: newBoard, solution: fullSolution };
 }
 
-// initialize the game
+// --- Game initialization ---
+
 function initGame() {
     const generated = generateSudoku(difficulty);
     board = JSON.parse(JSON.stringify(generated.puzzle));
@@ -176,18 +175,19 @@ function initGame() {
     renderGrid();
     updateStats();
     closeModal();
-}
-
-// set game language
-function setLanguage(lang) {
-    language = lang;
-    document.getElementById('btn-tr').classList.toggle('active', lang==='tr');
-    document.getElementById('btn-en').classList.toggle('active', lang==='en');
-    document.getElementById('btn-de').classList.toggle('active', lang==='de');
     updateLanguage();
 }
 
-// update UI translations
+// --- Language / Difficulty ---
+
+function setLanguage(lang) {
+    language = lang;
+    document.getElementById('btn-tr').classList.toggle('active', lang === 'tr');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-de').classList.toggle('active', lang === 'de');
+    updateLanguage();
+}
+
 function updateLanguage() {
     const t = translations[language];
     document.getElementById('lang-title').textContent = t.lang_title;
@@ -202,177 +202,170 @@ function updateLanguage() {
     document.getElementById('btn-new').textContent = t.new_game;
     document.getElementById('btn-check').textContent = t.check;
     document.getElementById('btn-clear').textContent = t.clear;
+    document.getElementById('btn-check-cell').textContent = t.check_cell;
     document.getElementById('tips-title').textContent = t.tips_title;
     document.getElementById('tip-1').textContent = t.tip_1;
     document.getElementById('tip-2').textContent = t.tip_2;
     document.getElementById('tip-3').textContent = t.tip_3;
     document.getElementById('tip-4').textContent = t.tip_4;
     document.getElementById('title').textContent = t.title;
-    document.getElementById('btn-num-delete').textContent = t.delete;
-    document.getElementById('modal-title').textContent = t.congratulations;
-    document.getElementById('modal-text').textContent = t.success_text;
-    document.getElementById('btn-modal-new').textContent = t.modal_new;
-    document.getElementById('btn-modal-close').textContent = t.modal_close;
 
-    const levelLabels = { easy:t.easy_level, medium:t.medium_level, hard:t.hard_level };
+    const levelLabels = { easy: t.easy_level, medium: t.medium_level, hard: t.hard_level };
     document.getElementById('difficulty-label').textContent = levelLabels[difficulty];
 }
 
-// set game difficulty
 function setDifficulty(level) {
     difficulty = level;
-    const btns = document.querySelectorAll('.difficulty-btn');
-    btns.forEach(btn=>{
-        if(['easy','medium','hard'].includes(btn.id.split('-')[1])){
-            btn.classList.toggle('active', btn.id===`btn-${level}`);
+    document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        if(['easy','medium','hard'].includes(btn.id.split('-')[1])) {
+            btn.classList.toggle('active', btn.id === `btn-${level}`);
         }
     });
-    updateLanguage();
     initGame();
 }
 
-// render Sudoku grid
+// --- Grid rendering ---
+
 function renderGrid() {
     const grid = document.getElementById('grid');
-    grid.innerHTML='';
-    for(let i=0;i<9;i++){
-        for(let j=0;j<9;j++){
+    grid.innerHTML = '';
+    for (let i=0; i<9; i++) {
+        for (let j=0; j<9; j++) {
             const cell = document.createElement('div');
-            cell.className='cell';
-            cell.id=`cell-${i}-${j}`;
-            if((j+1)%3===0 && j!==8) cell.classList.add('border-right');
-            if((i+1)%3===0 && i!==8) cell.classList.add('border-bottom');
-            if(originalBoard[i][j]!==0) cell.classList.add('given');
-            cell.textContent = board[i][j]!==0 ? board[i][j] : '';
-            cell.onclick = ()=>selectCell(i,j);
+            cell.className = 'cell';
+            cell.id = `cell-${i}-${j}`;
+            if ((j+1)%3===0 && j!==8) cell.classList.add('border-right');
+            if ((i+1)%3===0 && i!==8) cell.classList.add('border-bottom');
+            if (originalBoard[i][j] !== 0) cell.classList.add('given');
+            cell.textContent = board[i][j] !== 0 ? board[i][j] : '';
+            cell.onclick = () => selectCell(i,j);
             grid.appendChild(cell);
         }
     }
 }
 
-// select a cell
-function selectCell(row,col){
-    if(originalBoard[row][col]!==0) return;
-    if(selectedCell){
+// --- Cell selection ---
+
+function selectCell(row, col) {
+    if (originalBoard[row][col] !== 0) return;
+    if (selectedCell) {
         document.getElementById(`cell-${selectedCell[0]}-${selectedCell[1]}`).classList.remove('selected');
     }
-    selectedCell=[row,col];
+    selectedCell = [row, col];
     document.getElementById(`cell-${row}-${col}`).classList.add('selected');
 }
 
-// fill number in selected cell
-function fillNumber(num){
-    if(selectedCell){
-        const [row,col]=selectedCell;
-        board[row][col]=num;
+// --- Fill / Clear number ---
+
+function fillNumber(num) {
+    if (selectedCell) {
+        const [row, col] = selectedCell;
+        board[row][col] = num;
         renderGrid();
-        selectedCell=[row,col];
-        document.getElementById(`cell-${row}-${col}`).classList.add('selected');
+        selectCell(row, col); // reselect to keep highlight
         updateStats();
     }
 }
 
-// clear selected cell
-function clearCell(){
-    if(selectedCell){
-        const [row,col]=selectedCell;
-        board[row][col]=0;
+function clearCell() {
+    if (selectedCell) {
+        const [row, col] = selectedCell;
+        board[row][col] = 0;
         renderGrid();
-        selectedCell=[row,col];
-        document.getElementById(`cell-${row}-${col}`).classList.add('selected');
+        selectCell(row, col);
         updateStats();
     }
 }
 
-// check full solution (current behavior)
-function checkSolution(){
+// --- Check solution ---
+
+function checkSolution() {
     const status = document.getElementById('status');
     const t = translations[language];
-    let isComplete=true;
+    let isComplete = true;
 
-    for(let i=0;i<9;i++){
-        for(let j=0;j<9;j++){
-            if(board[i][j]===0 || board[i][j]!==solution[i][j]){
-                isComplete=false;
+    for (let i=0; i<9; i++) {
+        for (let j=0; j<9; j++) {
+            if (board[i][j] === 0 || board[i][j] !== solution[i][j]) {
+                isComplete = false;
                 break;
             }
         }
     }
 
-    if(!isComplete){
-        status.className='status error';
-        status.textContent=t.wrong;
-        setTimeout(()=>{if(status.className.includes('error')) status.textContent='';},2000);
-    }else{
-        status.className='status success';
-        status.textContent=t.correct;
+    if (!isComplete) {
+        status.className = 'status error';
+        status.textContent = t.wrong;
+        setTimeout(()=>{ if(status.className.includes('error')) status.textContent = ''; }, 2000);
+    } else {
+        status.className = 'status success';
+        status.textContent = t.correct;
         clearInterval(timerInterval);
         const minutes = Math.floor(gameTimer/60);
-        const seconds = gameTimer%60;
+        const seconds = gameTimer % 60;
         document.getElementById('finalTime').textContent = `${t.time_text} ${minutes}:${seconds.toString().padStart(2,'0')}`;
         setTimeout(()=>document.getElementById('successModal').classList.add('show'),500);
     }
 }
 
-// check only selected cell (new feature)
-function checkSelectedCell(){
-    if(!selectedCell) return;
-    const [row,col] = selectedCell;
+// --- Check single selected cell ---
+
+function checkSelectedCell() {
+    if (!selectedCell) return;
+    const [row, col] = selectedCell;
     const t = translations[language];
     const status = document.getElementById('status');
 
-    if(board[row][col]===solution[row][col]){
-        status.className='status success';
-        status.textContent='✓ '+t.correct;
-        highlightCell(row,col,'green');
-    }else{
-        status.className='status error';
-        status.textContent='❌ '+t.wrong;
-        highlightCell(row,col,'red');
+    if (board[row][col] === solution[row][col]) {
+        status.className = 'status success';
+        status.textContent = '✓ ' + t.correct;
+        highlightCell(row, col, 'green');
+    } else {
+        status.className = 'status error';
+        status.textContent = '❌ ' + t.wrong;
+        highlightCell(row, col, 'red');
     }
 
-    setTimeout(()=>{status.textContent='';},2000);
+    setTimeout(()=>{ status.textContent = ''; },2000);
 }
 
-// highlight a cell temporarily
-function highlightCell(row,col,color){
+function highlightCell(row, col, color) {
     const cell = document.getElementById(`cell-${row}-${col}`);
-    cell.style.backgroundColor=color;
-    setTimeout(()=>{cell.style.backgroundColor='';},800);
+    cell.style.backgroundColor = color;
+    setTimeout(()=>{ cell.style.backgroundColor = ''; },800);
 }
 
-// start game timer
-function startTimer(){
-    timerInterval=setInterval(()=>{
+// --- Timer & stats ---
+
+function startTimer() {
+    timerInterval = setInterval(()=>{
         gameTimer++;
-        const minutes=Math.floor(gameTimer/60);
-        const seconds=gameTimer%60;
-        document.getElementById('timer').textContent=`${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+        const minutes = Math.floor(gameTimer/60);
+        const seconds = gameTimer % 60;
+        document.getElementById('timer').textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
     },1000);
 }
 
-// update stats
-function updateStats(){
+function updateStats() {
     const empty = board.flat().filter(cell=>cell===0).length;
     document.getElementById('empty-count').textContent = empty;
     let correct = 0;
-    for(let i=0;i<9;i++){
-        for(let j=0;j<9;j++){
-            if(board[i][j]!==0 && board[i][j]===solution[i][j]) correct++;
+    for (let i=0;i<9;i++){
+        for (let j=0;j<9;j++){
+            if (board[i][j]!==0 && board[i][j]===solution[i][j]) correct++;
         }
     }
-    const accuracy=Math.round((correct/81)*100);
-    document.getElementById('accuracy').textContent = accuracy+'%';
+    const accuracy = Math.round((correct/81)*100);
+    document.getElementById('accuracy').textContent = accuracy + '%';
 }
 
-// start a new game
-function newGame(){ initGame(); }
+// --- Modal controls ---
 
-// close success modal
+function newGame(){ initGame(); }
 function closeModal(){ document.getElementById('successModal').classList.remove('show'); }
 
-// initialize on page load
-document.addEventListener('DOMContentLoaded',()=>{
+// --- Initialize on page load ---
+
+document.addEventListener('DOMContentLoaded', ()=>{
     initGame();
-    updateLanguage();
 });
