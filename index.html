@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sudoku Oyunu</title>
+    <title>Sudoku 2026</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Center action buttons vertically and horizontally */
         .action-buttons {
             display: flex;
             flex-direction: column;
@@ -17,41 +16,40 @@
 </head>
 <body>
     <div class="main-container">
-        <!-- SIDEBAR -->
         <div class="sidebar">
             <div class="logo"><div>数独</div><div>SUDOKU</div></div>
 
             <div class="section">
-                <div class="section-title" id="lang-title">🌍 Dil</div>
+                <div class="section-title" id="lang-title">Language</div>
                 <div class="difficulty-buttons" style="gap: 10px;">
-                    <button class="difficulty-btn active" onclick="setLanguage('tr')" id="btn-tr">🇹🇷 TR</button>
-                    <button class="difficulty-btn" onclick="setLanguage('en')" id="btn-en">🇬🇧 EN</button>
-                    <button class="difficulty-btn" onclick="setLanguage('de')" id="btn-de">🇩🇪 DE</button>
+                    <button class="difficulty-btn active" onclick="setLanguage('tr')" id="btn-tr">🇹🇷</button>
+                    <button class="difficulty-btn" onclick="setLanguage('en')" id="btn-en">🇬🇧</button>
+                    <button class="difficulty-btn" onclick="setLanguage('de')" id="btn-de">🇩🇪</button>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title" id="difficulty-title">Zorluk Seviyesi</div>
+                <div class="section-title" id="difficulty-title">Difficulty</div>
                 <div class="difficulty-buttons">
-                    <button class="difficulty-btn active" onclick="setDifficulty('easy')" id="btn-easy">Kolay</button>
-                    <button class="difficulty-btn" onclick="setDifficulty('medium')" id="btn-medium">Orta</button>
-                    <button class="difficulty-btn" onclick="setDifficulty('hard')" id="btn-hard">Zor</button>
+                    <button class="difficulty-btn active" onclick="setDifficulty('easy')" id="btn-easy">Easy</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('medium')" id="btn-medium">Medium</button>
+                    <button class="difficulty-btn" onclick="setDifficulty('hard')" id="btn-hard">Hard</button>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title" id="stats-title">İstatistikler</div>
+                <div class="section-title" id="stats-title">Statistics</div>
                 <div class="stats">
                     <div class="stat-item">
-                        <span class="stat-label" id="time-label">Süre:</span>
+                        <span class="stat-label" id="time-label">Time:</span>
                         <span class="timer" id="timer">00:00</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label" id="empty-label">Boş Hücre:</span>
+                        <span class="stat-label" id="empty-label">Empty:</span>
                         <span class="stat-value" id="empty-count">81</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label" id="accuracy-label">Doğruluk:</span>
+                        <span class="stat-label" id="accuracy-label">Accuracy:</span>
                         <span class="stat-value" id="accuracy">0%</span>
                     </div>
                 </div>
@@ -59,32 +57,30 @@
 
             <div class="section">
                 <div class="action-buttons">
-                    <button class="action-btn full" onclick="newGame()" id="btn-new">🔄 Yeni Oyun</button>
-                    <button class="action-btn" onclick="checkSolution()" id="btn-check">✓ Kontrol Et</button>
-                    <button class="action-btn" onclick="clearCell()" id="btn-clear">✕ Hücreyi Sil</button>
-                    <!-- Translatable single-cell check button -->
-                    <button class="action-btn" onclick="checkSelectedCell()" id="btn-check-cell"></button>
+                    <button class="action-btn full" onclick="newGame()" id="btn-new">New Game</button>
+                    <button class="action-btn" onclick="checkSolution()" id="btn-check">Check Board</button>
+                    <button class="action-btn" onclick="clearCell()" id="btn-clear">Clear Cell</button>
+                    <button class="action-btn" onclick="checkSelectedCell()" id="btn-check-cell">Check Cell</button>
                 </div>
             </div>
 
             <div class="section">
                 <div class="tips">
-                    <h4 id="tips-title">💡 İpuçları</h4>
+                    <h4 id="tips-title">Tips</h4>
                     <ul id="tips-list">
-                        <li id="tip-1">Her satırda 1-9 bir kez olmalı</li>
-                        <li id="tip-2">Her sütunda 1-9 bir kez olmalı</li>
-                        <li id="tip-3">Her 3x3 kutuda 1-9 bir kez olmalı</li>
-                        <li id="tip-4">Mantıksal düşün, tahmin etme</li>
+                        <li id="tip-1"></li>
+                        <li id="tip-2"></li>
+                        <li id="tip-3"></li>
+                        <li id="tip-4"></li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!-- GAME AREA -->
         <div class="game-area">
             <div class="header">
-                <h1 id="title">Sudoku Bulmacası</h1>
-                <p id="difficulty-label">Kolay seviye</p>
+                <h1 id="title">Sudoku Puzzle</h1>
+                <p id="difficulty-label">Easy</p>
             </div>
 
             <div class="sudoku-grid" id="grid"></div>
@@ -99,22 +95,21 @@
                 <button class="number-btn" onclick="fillNumber(7)">7</button>
                 <button class="number-btn" onclick="fillNumber(8)">8</button>
                 <button class="number-btn" onclick="fillNumber(9)">9</button>
-                <button class="number-btn" onclick="clearCell()" id="btn-num-delete" style="font-size: 11px;">Sil</button>
+                <button class="number-btn" onclick="clearCell()" id="btn-num-delete" style="font-size: 11px;">DEL</button>
             </div>
 
             <div class="status" id="status"></div>
         </div>
     </div>
 
-    <!-- SUCCESS MODAL -->
     <div class="modal" id="successModal">
         <div class="modal-content">
-            <h2 id="modal-title">🎉 Tebrikler!</h2>
+            <h2 id="modal-title">Congratulations!</h2>
             <p id="finalTime"></p>
-            <p id="modal-text">Sudoku'yu başarıyla çözdün!</p>
+            <p id="modal-text"></p>
             <div class="modal-buttons">
-                <button class="modal-btn" onclick="newGame()" id="btn-modal-new">Yeni Oyun</button>
-                <button class="modal-btn" onclick="closeModal()" id="btn-modal-close">Kapat</button>
+                <button class="modal-btn" onclick="newGame()" id="btn-modal-new">New Game</button>
+                <button class="modal-btn" onclick="closeModal()" id="btn-modal-close">Close</button>
             </div>
         </div>
     </div>
@@ -122,7 +117,7 @@
     <script src="script.js"></script>
 
     <footer class="footer">
-        <p>🎌 数独ゲーム © 2026 | 作ucı: <strong>The_Bozgun</strong> 🧠</p>
+        <p>🎌 数独ゲーム © 2026 | Dev: <strong>The_Bozgun</strong> 🧠</p>
     </footer>
 </body>
 </html>
