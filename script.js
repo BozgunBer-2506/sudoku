@@ -106,7 +106,7 @@ const translations = {
     }
 };
 
-// --- Sudoku helper functions ---
+// --- Sudoku Core Logic ---
 
 function isValid(grid, row, col, num) {
     for (let i = 0; i < 9; i++) {
@@ -158,7 +158,7 @@ function generateSudoku(level) {
     return { puzzle: newBoard, solution: fullSolution };
 }
 
-// --- Game initialization ---
+// --- Game Control ---
 
 function initGame() {
     const generated = generateSudoku(difficulty);
@@ -168,8 +168,10 @@ function initGame() {
 
     gameTimer = 0;
     selectedCell = null;
-    document.getElementById('status').textContent = '';
-    document.getElementById('status').className = 'status';
+    const status = document.getElementById('status');
+    status.textContent = '';
+    status.className = 'status';
+    
     clearInterval(timerInterval);
     startTimer();
     renderGrid();
@@ -177,8 +179,6 @@ function initGame() {
     closeModal();
     updateLanguage();
 }
-
-// --- Language / Difficulty ---
 
 function setLanguage(lang) {
     language = lang;
@@ -224,7 +224,7 @@ function setDifficulty(level) {
     initGame();
 }
 
-// --- Grid rendering ---
+// --- UI Rendering ---
 
 function renderGrid() {
     const grid = document.getElementById('grid');
@@ -244,25 +244,34 @@ function renderGrid() {
     }
 }
 
-// --- Cell selection ---
+function highlightCell(row, col, color) {
+    const cell = document.getElementById(`cell-${row}-${col}`);
+    if (cell) {
+        const originalBg = cell.style.backgroundColor;
+        cell.style.backgroundColor = color;
+        setTimeout(() => { cell.style.backgroundColor = originalBg; }, 800);
+    }
+}
+
+// --- Interaction Logic ---
 
 function selectCell(row, col) {
     if (originalBoard[row][col] !== 0) return;
     if (selectedCell) {
-        document.getElementById(`cell-${selectedCell[0]}-${selectedCell[1]}`).classList.remove('selected');
+        const prev = document.getElementById(`cell-${selectedCell[0]}-${selectedCell[1]}`);
+        if(prev) prev.classList.remove('selected');
     }
     selectedCell = [row, col];
-    document.getElementById(`cell-${row}-${col}`).classList.add('selected');
+    const current = document.getElementById(`cell-${row}-${col}`);
+    if(current) current.classList.add('selected');
 }
-
-// --- Fill / Clear number ---
 
 function fillNumber(num) {
     if (selectedCell) {
         const [row, col] = selectedCell;
         board[row][col] = num;
         renderGrid();
-        selectCell(row, col); // reselect to keep highlight
+        selectCell(row, col);
         updateStats();
     }
 }
@@ -277,16 +286,30 @@ function clearCell() {
     }
 }
 
-// --- Check solution ---
+// --- Validation Logic (Final Solution) ---
 
 function checkSolution() {
+    // Scroll to top for mobile visibility
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     const status = document.getElementById('status');
     const t = translations[language];
-    let isComplete = true;
+    
+    const emptyCells = board.flat().filter(cell => cell === 0).length;
+    
+    if (emptyCells > 0) {
+        status.className = 'status error';
+        status.textContent = (language === 'tr' ? `Hala ${emptyCells} boş hücre var!` : 
+                             language === 'en' ? `Still ${emptyCells} empty cells!` : 
+                             `Noch ${emptyCells} leere Zellen!`);
+        setTimeout(() => { if(status.className.includes('error')) status.textContent = ''; }, 5000);
+        return;
+    }
 
-    for (let i=0; i<9; i++) {
-        for (let j=0; j<9; j++) {
-            if (board[i][j] === 0 || board[i][j] !== solution[i][j]) {
+    let isComplete = true;
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            if (board[i][j] !== solution[i][j]) {
                 isComplete = false;
                 break;
             }
@@ -295,60 +318,69 @@ function checkSolution() {
 
     if (!isComplete) {
         status.className = 'status error';
-        status.textContent = t.wrong;
-        setTimeout(()=>{ if(status.className.includes('error')) status.textContent = ''; }, 2000);
+        status.textContent = t.wrong; // No manual icon added here
+        setTimeout(() => { if(status.className.includes('error')) status.textContent = ''; }, 5000);
     } else {
         status.className = 'status success';
-        status.textContent = t.correct;
+        status.textContent = t.correct; // No manual icon added here
         clearInterval(timerInterval);
-        const minutes = Math.floor(gameTimer/60);
+        
+        const minutes = Math.floor(gameTimer / 60);
         const seconds = gameTimer % 60;
-        document.getElementById('finalTime').textContent = `${t.time_text} ${minutes}:${seconds.toString().padStart(2,'0')}`;
-        setTimeout(()=>document.getElementById('successModal').classList.add('show'),500);
+        const finalTime = document.getElementById('finalTime');
+        if(finalTime) finalTime.textContent = `${t.time_text} ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        setTimeout(() => {
+            const modal = document.getElementById('successModal');
+            if(modal) modal.classList.add('show');
+        }, 500);
     }
 }
 
-// --- Check single selected cell ---
+// --- Single Cell Hint/Check ---
 
 function checkSelectedCell() {
     if (!selectedCell) return;
+    
+    // Scroll to top for mobile visibility
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     const [row, col] = selectedCell;
     const t = translations[language];
     const status = document.getElementById('status');
 
+    gameTimer += 30; // Penalty
+
     if (board[row][col] === solution[row][col]) {
         status.className = 'status success';
-        status.textContent = '✓ ' + t.correct;
+        status.textContent = t.correct; // Clean use of translation
         highlightCell(row, col, 'green');
     } else {
         status.className = 'status error';
-        status.textContent = '❌ ' + t.wrong;
+        status.textContent = t.wrong; // Clean use of translation
         highlightCell(row, col, 'red');
     }
 
-    setTimeout(()=>{ status.textContent = ''; },2000);
+    setTimeout(() => { if(status) status.textContent = ''; }, 2000);
 }
 
-function highlightCell(row, col, color) {
-    const cell = document.getElementById(`cell-${row}-${col}`);
-    cell.style.backgroundColor = color;
-    setTimeout(()=>{ cell.style.backgroundColor = ''; },800);
-}
-
-// --- Timer & stats ---
+// --- Utilities & Stats ---
 
 function startTimer() {
     timerInterval = setInterval(()=>{
         gameTimer++;
         const minutes = Math.floor(gameTimer/60);
         const seconds = gameTimer % 60;
-        document.getElementById('timer').textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+        const timerEl = document.getElementById('timer');
+        if(timerEl) timerEl.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
     },1000);
 }
 
 function updateStats() {
     const empty = board.flat().filter(cell=>cell===0).length;
-    document.getElementById('empty-count').textContent = empty;
+    const emptyEl = document.getElementById('empty-count');
+    if(emptyEl) emptyEl.textContent = empty;
+
     let correct = 0;
     for (let i=0;i<9;i++){
         for (let j=0;j<9;j++){
@@ -356,16 +388,28 @@ function updateStats() {
         }
     }
     const accuracy = Math.round((correct/81)*100);
-    document.getElementById('accuracy').textContent = accuracy + '%';
+    const accEl = document.getElementById('accuracy');
+    if(accEl) accEl.textContent = accuracy + '%';
 }
 
-// --- Modal controls ---
-
 function newGame(){ initGame(); }
-function closeModal(){ document.getElementById('successModal').classList.remove('show'); }
+function closeModal(){ 
+    const modal = document.getElementById('successModal');
+    if(modal) modal.classList.remove('show'); 
+}
 
-// --- Initialize on page load ---
+// --- Event Listeners ---
 
-document.addEventListener('DOMContentLoaded', ()=>{
+document.addEventListener('DOMContentLoaded', () => {
     initGame();
+});
+
+document.addEventListener('keydown', (event) => {
+    if (!selectedCell) return;
+    const key = event.key;
+    if (key >= '1' && key <= '9') {
+        fillNumber(parseInt(key));
+    } else if (key === 'Backspace' || key === 'Delete') {
+        clearCell();
+    }
 });
